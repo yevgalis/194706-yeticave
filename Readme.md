@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Yevgeniy Alishevets](https://up.htmlacademy.ru/php/8/user/194706).
-* Наставник: `Неизвестно`.
+* Наставник: [Алексей Стулов](https://htmlacademy.ru/profile/id25231).
 
 ---
 
