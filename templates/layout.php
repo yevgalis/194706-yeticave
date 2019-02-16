@@ -1,7 +1,3 @@
-<?php
-    $is_auth = rand(0, 1);
-    $user_name = 'John Doe';
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -51,7 +47,7 @@
 </header>
 
 <main class="container">
-    <?= $content; ?>
+    <?=$content; ?>
 </main>
 </div>
 
