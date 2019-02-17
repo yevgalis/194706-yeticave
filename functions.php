@@ -16,7 +16,7 @@
         return $result;
     }
 
-    function renderPrice ($price) {
+    function render_price ($price) {
         $price = ceil($price);
 
         if ($price >= 1000) {
@@ -26,13 +26,19 @@
         return  $price . '<b class="rub">р</b>';
     }
 
-    function getTimeDifference () {
-        date_default_timezone_set("Asia/Novosibirsk");
+    function show_remaining_time ($end_date) {
+        $now = date_create('now');
+        $close_date = date_create($end_date);
+        $diff = date_diff($now, $close_date);
 
-        $curDate = date_create("now");
-        $tomorrowMidnight = date_create("tomorrow midnight");
-        $diff = date_interval_format(date_diff($curDate, $tomorrowMidnight), '%H:%i');
+        if ($diff->d >= 1 && $diff->d <= 3) {
+            $format = $diff->d . ' дн.';
+        } else if ($diff->d > 3) {
+            $format = date('d.m.Y', strtotime($end_date));
+        } else {
+            $format = $diff->h . ':' . $diff->i;
+        }
 
-        return $diff;
+        return $format;
     }
 ?>
