@@ -9,10 +9,10 @@
             <div class="lot__state">
                 <div class="lot__rate">
                     <span class="lot__amount">Стартовая цена</span>
-                    <span class="lot__cost"><?=renderPrice($lot['price']); ?></span>
+                    <span class="lot__cost"><?=render_price($lot['price']); ?></span>
                 </div>
                 <div class="lot__timer timer">
-                    <?=getTimeDifference(); ?>
+                    <?=show_remaining_time('tomorrow'); ?>
                 </div>
             </div>
         </div>
