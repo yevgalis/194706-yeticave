@@ -1,7 +1,6 @@
 <?php
     require_once('init.php');
-    require_once('functions.php');
-    require_once('data.php');
+    //require_once('data.php');
 
     $lots_content = include_template('lot.php', ['lots' => $lots]);
     $page_content = include_template('index.php', ['categories' => $categories, 'lots' => $lots_content]);
