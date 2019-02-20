@@ -1,10 +1,11 @@
 -- INSERT Categories
-INSERT INTO categories (name, class) VALUES ('Доски и лыжи', 'boards');
-INSERT INTO categories (name, class) VALUES ('Крепления', 'attachment');
-INSERT INTO categories (name, class) VALUES ('Ботинки', 'boots');
-INSERT INTO categories (name, class) VALUES ('Одежда', 'clothing');
-INSERT INTO categories (name, class) VALUES ('Инструменты', 'tools');
-INSERT INTO categories (name, class) VALUES ('Разное', 'other');
+INSERT INTO categories (name, class) VALUES
+	('Доски и лыжи', 'boards'),
+	('Крепления', 'attachment'),
+	('Ботинки', 'boots'),
+	('Одежда', 'clothing'),
+	('Инструменты', 'tools'),
+	('Разное', 'other');
 
 -- INSERT Users
 INSERT INTO users (registration_date, email, username, password, avatar, contacts, lots, bets)
@@ -35,10 +36,15 @@ INSERT INTO bets (bet_date, amount, user_id, lot_id) VALUES (CURRENT_TIMESTAMP()
 SELECT * FROM categories;
 
 -- SELECT opened lots
-SELECT l.name, l.start_price, l.image, c.name FROM lots l
+SELECT 	l.name AS title, l.start_price, l.image,
+		CASE
+			WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
+			ELSE (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id)
+		END price, c.name AS category
+FROM lots l
 	INNER JOIN categories c USING(category_id)
-WHERE l.winner_id IS NULL
-	AND l.end_date > NOW();
+WHERE l.end_date > NOW()
+ORDER BY l.creation_date DESC;
 
 -- SELECT lots by ID
 SELECT l.*, c.name FROM lots l

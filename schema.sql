@@ -16,9 +16,7 @@ CREATE TABLE users (
     username VARCHAR(40) NOT NULL,
     password VARCHAR(64) NOT NULL,
     avatar VARCHAR(50),
-    contacts VARCHAR(60) NOT NULL,
-    lots VARCHAR(200),
-    bets VARCHAR(200)
+    contacts VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE lots (
@@ -52,9 +50,3 @@ CREATE TABLE bets (
     FOREIGN KEY (lot_id)
         REFERENCES lots(lot_id)
 );
-
-CREATE INDEX lot_enddate ON lots(end_date);
-CREATE INDEX lot_author ON lots(author_id);
-CREATE INDEX lot_category ON lots(category_id);
-CREATE INDEX bet_user ON bets(user_id);
-CREATE INDEX bet_lot ON bets(lot_id);
