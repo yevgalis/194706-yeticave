@@ -1,9 +1,24 @@
 <?php
     require_once('init.php');
-    //require_once('data.php');
 
-    $lots_content = include_template('lot.php', ['lots' => $lots]);
-    $page_content = include_template('index.php', ['categories' => $categories, 'lots' => $lots_content]);
+    $lots = [];
+    $sql = 'SELECT 	l.lot_id, l.name AS title, l.start_price, l.image,
+                    CASE
+                        WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
+                        ELSE (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id)
+                    END price, c.name AS category
+                FROM lots l
+                INNER JOIN categories c USING(category_id)
+                WHERE l.end_date > NOW()
+                ORDER BY l.creation_date DESC
+                LIMIT 6';
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    $page_content = include_template('index.php', ['categories' => $categories, 'lots' => $lots]);
     $layout_content = include_template('layout.php', ['title' => 'Главная', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
 
     print($layout_content);

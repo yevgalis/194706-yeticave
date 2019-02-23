@@ -16,14 +16,14 @@
         return $result;
     }
 
-    function render_price ($price) {
+    function render_price ($price, $show_money_sign = false) {
         $price = ceil($price);
 
         if ($price >= 1000) {
             $price = number_format($price, 0, '.', ' ');
         }
 
-        return  $price . '<b class="rub">р</b>';
+        return $show_money_sign === true ? $price . '<b class="rub">р</b>' : $price;
     }
 
     function show_remaining_time ($end_date) {
