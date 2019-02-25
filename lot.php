@@ -4,7 +4,7 @@
     $lot_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
     $lot = [];
-    $sql = 'SELECT 	l.lot_id, l.name AS title, l.description, l.start_price, l.image,
+    $sql = 'SELECT 	l.lot_id, l.name AS title, l.description, l.start_price, l.end_date, l.image,
             CASE
                 WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
                 ELSE (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id)
