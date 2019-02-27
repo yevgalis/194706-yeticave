@@ -2,7 +2,7 @@
     require_once('init.php');
 
     $lots = [];
-    $sql = 'SELECT 	l.lot_id, l.name AS title, l.start_price, l.image,
+    $sql = 'SELECT 	l.lot_id, l.name AS title, l.start_price, l.end_date, l.image,
                     CASE
                         WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
                         ELSE (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id)

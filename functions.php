@@ -1,4 +1,6 @@
 <?php
+    require_once('mysql_helper.php');
+
     function include_template($name, $data) {
         $name = 'templates/' . $name;
         $result = '';
@@ -40,5 +42,29 @@
         }
 
         return $format;
+    }
+
+    function db_insert_data($link, $data = []) {
+        $sql = "INSERT INTO lots (creation_date, name, description, image, start_price, end_date, step, author_id, winner_id, category_id) VALUES (CURRENT_TIMESTAMP(), ?, ?, ?, ?, ?, ?, 1, NULL, ?)";
+
+        $stmt = db_get_prepare_stmt($link, $sql, [
+            $data['lot-name'],
+            $data['message'],
+            $data['filename'],
+            $data['lot-rate'],
+            $data['lot-date'],
+            $data['lot-step'],
+            $data['category_id']
+        ]);
+
+        $result = mysqli_stmt_execute($stmt);
+
+        if ($result) {
+            $id = mysqli_insert_id($link);
+        } else {
+            exit('Произошла ошибка');
+        }
+
+        return $id;
     }
 ?>
