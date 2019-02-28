@@ -93,7 +93,17 @@
 
             move_uploaded_file($_FILES['item-photo']['tmp_name'], $file_path . $file_name);
 
-            $new_lot_id = db_insert_data($con, $data);
+            $sql = "INSERT INTO lots (creation_date, name, description, image, start_price, end_date, step, author_id, winner_id, category_id) VALUES (CURRENT_TIMESTAMP(), ?, ?, ?, ?, ?, ?, 1, NULL, ?)";
+
+            $new_lot_id = db_insert_data($con, $sql, [
+                $data['lot-name'],
+                $data['message'],
+                $data['filename'],
+                $data['lot-rate'],
+                $data['lot-date'],
+                $data['lot-step'],
+                $data['category_id']
+            ]);
 
             if ($new_lot_id) {
                 header('Location: lot.php?id=' . $new_lot_id);
@@ -101,7 +111,7 @@
         }
     }
 
-    $page_content = include_template('add-lot.php', ['categories' => $categories, 'invalid_values' => $invalid_values]);
+    $page_content = include_template('add-lot.php', ['categories' => $categories, 'invalid_values' => $invalid_values, 'data' => $data]);
     $layout_content = include_template('layout.php', ['title' => 'Добавление лота', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
 
     print($layout_content);
