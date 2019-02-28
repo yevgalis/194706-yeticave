@@ -82,7 +82,7 @@
                 $data['name'],
                 $data['password'],
                 $data['avatar'],
-                $data['contacts']
+                $data['message']
             ]);
 
             if ($new_user_id) {
