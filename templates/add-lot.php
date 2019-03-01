@@ -12,7 +12,7 @@
       <div class="form__container-two">
         <div class="form__item<?=$invalid_values['lot-name'] ? ' form__item--invalid' : ''; ?>">
           <label for="lot-name">Наименование</label>
-          <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" required>
+          <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота"<?=!empty($data['lot-name']) ? ' value="' . $data['lot-name'] . '"' : ''; ?> required>
           <span class="form__error"><?=$invalid_values['lot-name'] ?></span>
         </div>
         <div class="form__item<?=$invalid_values['category'] ? ' form__item--invalid' : ''; ?>">
@@ -28,7 +28,7 @@
       </div>
       <div class="form__item form__item--wide<?=$invalid_values['message'] ? ' form__item--invalid' : ''; ?>">
         <label for="message">Описание</label>
-        <textarea id="message" name="message" placeholder="Напишите описание лота" required></textarea>
+        <textarea id="message" name="message" placeholder="Напишите описание лота" required><?=!empty($data['message']) ? $data['message'] : ''; ?></textarea>
         <span class="form__error"><?=$invalid_values['message'] ?></span>
       </div>
       <div class="form__item form__item--file<?=$invalid_values['item-photo'] ? ' form__item--invalid' : ''; ?>">
@@ -50,17 +50,17 @@
       <div class="form__container-three">
         <div class="form__item form__item--small<?=$invalid_values['lot-rate'] ? ' form__item--invalid' : ''; ?>">
           <label for="lot-rate">Начальная цена</label>
-          <input id="lot-rate" type="number" name="lot-rate" placeholder="0" required>
+          <input id="lot-rate" type="number" name="lot-rate" placeholder="0"<?=!empty($data['lot-rate']) ? ' value="' . $data['lot-rate'] . '"' : ''; ?> required>
           <span class="form__error"><?=$invalid_values['lot-rate'] ?></span>
         </div>
         <div class="form__item form__item--small<?=$invalid_values['lot-step'] ? ' form__item--invalid' : ''; ?>">
           <label for="lot-step">Шаг ставки</label>
-          <input id="lot-step" type="number" name="lot-step" placeholder="0" required>
+          <input id="lot-step" type="number" name="lot-step" placeholder="0"<?=!empty($data['lot-step']) ? ' value="' . $data['lot-step'] . '"' : ''; ?> required>
           <span class="form__error"><?=$invalid_values['lot-step'] ?></span>
         </div>
         <div class="form__item<?=$invalid_values['lot-date'] ? ' form__item--invalid' : ''; ?>">
           <label for="lot-date">Дата окончания торгов</label>
-          <input class="form__input-date" id="lot-date" type="date" name="lot-date" required>
+          <input class="form__input-date" id="lot-date" type="date" name="lot-date"<?=!empty($data['lot-date']) ? ' value="' . $data['lot-date'] . '"' : ''; ?> required>
           <span class="form__error"><?=$invalid_values['lot-date'] ?></span>
         </div>
       </div>

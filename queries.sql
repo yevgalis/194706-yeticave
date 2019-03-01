@@ -11,8 +11,8 @@ VALUES
 -- INSERT Users
 INSERT INTO users (registration_date, email, username, password, avatar, contacts, lots, bets)
 VALUES
-  (CURRENT_TIMESTAMP(), 'user1@gmail.com', 'Ivan Petrov', '123456', NULL, 'Moscow 123-45-67', NULL, NULL),
-  (CURRENT_TIMESTAMP(), 'user2@gmail.com', 'John Doe', 'qwerty', NULL, 'New York 3456789876', NULL, NULL);
+  (CURRENT_TIMESTAMP(), 'user1@gmail.com', 'Ivan Petrov', '123456', NULL, 'Moscow 123-45-67'),
+  (CURRENT_TIMESTAMP(), 'user2@gmail.com', 'John Doe', 'qwerty', NULL, 'New York 3456789876');
 
 -- INSERT lots
 INSERT INTO lots (creation_date, name, description, image, start_price, end_date, step, author_id, winner_id, category_id)
