@@ -1,6 +1,25 @@
 <?php
     require_once('init.php');
 
+    if (empty($_SESSION['user'])) {
+        header('HTTP/1.1 403 Forbidden');
+
+        $page_content = include_template('error_redirect.php', [
+            'categories' => $categories,
+            'error_title' => 'Доступ запрещен',
+            'error_text' => 'Для добавления лота <a href="login.php">Войдите на сайт</a> или <a href="sign-up.php">Зарегистрируйтесь</a>',
+            ]);
+
+        $layout_content = include_template('layout.php', [
+            'title' => 'Страница не найдена',
+            'content' => $page_content,
+            'categories' => $categories
+            ]);
+
+        print($layout_content);
+        exit();
+    }
+
     $title_max_length = 100;
     $decription_max_length = 500;
     $max_filesize = 1;  // MB
@@ -43,7 +62,6 @@
                 $invalid_values['category'] = 'Выберите категорию';
             }
         }
-
 
         // LOT DESCRIPTION CHECK
         if (empty($invalid_values['message']) && strlen($data['message']) > $decription_max_length) {
@@ -111,8 +129,16 @@
         }
     }
 
-    $page_content = include_template('add-lot.php', ['categories' => $categories, 'invalid_values' => $invalid_values, 'data' => $data]);
-    $layout_content = include_template('layout.php', ['title' => 'Добавление лота', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+    $page_content = include_template('add-lot.php', [
+        'categories' => $categories,
+        'invalid_values' => $invalid_values,
+        'data' => $data
+        ]);
+
+    $layout_content = include_template('layout.php', [
+        'title' => 'Добавление лота',
+        'content' => $page_content,
+        'categories' => $categories]);
 
     print($layout_content);
 ?>
