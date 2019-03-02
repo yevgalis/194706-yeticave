@@ -2,6 +2,7 @@
     require_once('init.php');
 
     $lots = [];
+
     $sql = 'SELECT 	l.lot_id, l.name AS title, l.start_price, l.end_date, l.image,
                     CASE
                         WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
@@ -12,6 +13,7 @@
                 WHERE l.end_date > NOW()
                 ORDER BY l.creation_date DESC
                 LIMIT 6';
+
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -25,7 +27,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Главная',
-        // 'user' => $user,
         'content' => $page_content,
         'categories' => $categories
         ]);

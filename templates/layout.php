@@ -25,7 +25,7 @@
 
         <?php if (!empty($_SESSION['user'])): ?>
             <div class="user-menu__image">
-                <img src="img/user.png" width="40" height="40" alt="Пользователь">
+                <img src="img/avatars/<?=$_SESSION['user']['avatar'] ? $_SESSION['user']['avatar'] : 'user.png'; ?>" width="40" height="40" alt="Пользователь">
             </div>
             <div class="user-menu__logged">
                 <p><?=htmlspecialchars($_SESSION['user']['username']); ?></p>

@@ -44,14 +44,14 @@
         return $format;
     }
 
-    function db_fetch_data($link, $sql, $data = []) {
+    function db_fetch_data($link, $sql, $data = [], $is_single_res = false) {
         $result = [];
         $stmt = db_get_prepare_stmt($link, $sql, $data);
         mysqli_stmt_execute($stmt);
         $res = mysqli_stmt_get_result($stmt);
 
         if ($res) {
-            $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+            $result = $is_single_res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : mysqli_fetch_all($res, MYSQLI_ASSOC);
         }
 
         return $result;

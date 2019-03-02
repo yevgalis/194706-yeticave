@@ -10,10 +10,9 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $keys = ['email', 'password', 'name', 'message'];
-        $email_check = [];
+        $user_data = [];
         $file_name = '';
         $file_path = '';
-        // $sql = '';
 
         foreach ($keys as $key) {
             if (isset($_POST[$key]) && !empty(trim($_POST[$key]))) {
@@ -29,12 +28,12 @@
                 $invalid_values['email'] = 'Неверный формат адреса email';
             } else {
                 $sql = 'SELECT * FROM users WHERE email = ?';
-                $email_check = db_fetch_data($con, $sql, [$data['email']]);
-
-                if ($email_check) {
-                    $invalid_values['email'] = 'Пользователь с таким email уже зарегистрирован';
-                }
+                $user_data = db_fetch_data($con, $sql, [$data['email']]);
             }
+        }
+
+        if (empty($invalid_values['email']) && !empty($user_data)) {
+            $invalid_values['email'] = 'Пользователь с таким email уже зарегистрирован';
         }
 
         // PASSWORD CHECK
@@ -102,8 +101,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Регистрация',
-        // 'is_auth' => $is_auth,
-        // 'user_name' => $user_name,
         'content' => $page_content,
         'categories' => $categories
         ]);

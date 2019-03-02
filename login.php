@@ -7,7 +7,6 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $keys = ['email', 'password'];
-        // $sql = '';
 
         foreach ($keys as $key) {
             if (isset($_POST[$key]) && !empty(trim($_POST[$key]))) {
@@ -23,12 +22,12 @@
                 $invalid_values['email'] = 'Неверный формат адреса email';
             } else {
                 $sql = 'SELECT * FROM users WHERE email = ?';
-                $user_data = db_fetch_data($con, $sql, [$data['email']]);
-
-                if (empty($user_data)) {
-                    $invalid_values['email'] = 'Пользователь с таким email не найден';
-                }
+                $user_data = db_fetch_data($con, $sql, [$data['email']], true);
             }
+        }
+
+        if (empty($invalid_values['email']) && empty($user_data)) {
+            $invalid_values['email'] = 'Пользователь с таким email не найден';
         }
 
         // PASSWORD CHECK
@@ -37,7 +36,7 @@
                 $_SESSION['user'] = $user_data;
                 header('Location: index.php');
             } elseif (!empty($user_data) && !password_verify($data['password'], $user_data['password'])) {
-                $invalid_values['password'] = 'Неверный пароль. Попробуйте еще раз';
+                $invalid_values['password'] = 'Вы ввели неверный пароль';
             }
         }
     }
@@ -50,8 +49,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Вход',
-        // 'is_auth' => $is_auth,
-        // 'user_name' => $user_name,
         'content' => $page_content,
         'categories' => $categories
         ]);
