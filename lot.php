@@ -28,8 +28,17 @@
         exit();
     }
 
-    $lot_content = include_template('lot_details.php', ['categories' => $categories, 'lot' => $lot]);
-    $layout_content = include_template('layout.php', ['title' => $lot['title'], 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $lot_content, 'categories' => $categories]);
+    $lot_content = include_template('lot_details.php', [
+        'categories' => $categories,
+        'lot' => $lot
+        ]);
+
+    $layout_content = include_template('layout.php', [
+        'title' => $lot['title'],
+        // 'is_auth' => $is_auth,
+        // 'user_name' => $user_name,
+        'content' => $lot_content,
+        'categories' => $categories]);
 
     print($layout_content);
 ?>

@@ -10,7 +10,10 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $keys = ['email', 'password', 'name', 'message'];
+        $email_check = [];
         $file_name = '';
+        $file_path = '';
+        // $sql = '';
 
         foreach ($keys as $key) {
             if (isset($_POST[$key]) && !empty(trim($_POST[$key]))) {
@@ -86,13 +89,24 @@
             ]);
 
             if ($new_user_id) {
-                header('Location: index.php');
+                header('Location: login.php');
             }
         }
     }
 
-    $page_content = include_template('sign-up.php', ['categories' => $categories, 'invalid_values' => $invalid_values, 'data' => $data]);
-    $layout_content = include_template('layout.php', ['title' => 'Регистрация', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+    $page_content = include_template('sign-up.php', [
+        'categories' => $categories,
+        'invalid_values' => $invalid_values,
+        'data' => $data
+        ]);
+
+    $layout_content = include_template('layout.php', [
+        'title' => 'Регистрация',
+        // 'is_auth' => $is_auth,
+        // 'user_name' => $user_name,
+        'content' => $page_content,
+        'categories' => $categories
+        ]);
 
     print($layout_content);
 ?>

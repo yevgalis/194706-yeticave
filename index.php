@@ -18,8 +18,17 @@
         $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    $page_content = include_template('index.php', ['categories' => $categories, 'lots' => $lots]);
-    $layout_content = include_template('layout.php', ['title' => 'Главная', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+    $page_content = include_template('index.php', [
+        'categories' => $categories,
+        'lots' => $lots
+        ]);
+
+    $layout_content = include_template('layout.php', [
+        'title' => 'Главная',
+        // 'user' => $user,
+        'content' => $page_content,
+        'categories' => $categories
+        ]);
 
     print($layout_content);
 ?>

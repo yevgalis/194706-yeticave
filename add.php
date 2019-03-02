@@ -111,8 +111,18 @@
         }
     }
 
-    $page_content = include_template('add-lot.php', ['categories' => $categories, 'invalid_values' => $invalid_values, 'data' => $data]);
-    $layout_content = include_template('layout.php', ['title' => 'Добавление лота', 'is_auth' => $is_auth, 'user_name' => $user_name, 'content' => $page_content, 'categories' => $categories]);
+    $page_content = include_template('add-lot.php', [
+        'categories' => $categories,
+        'invalid_values' => $invalid_values,
+        'data' => $data
+        ]);
+
+    $layout_content = include_template('layout.php', [
+        'title' => 'Добавление лота',
+        // 'is_auth' => $is_auth,
+        // 'user_name' => $user_name,
+        'content' => $page_content,
+        'categories' => $categories]);
 
     print($layout_content);
 ?>

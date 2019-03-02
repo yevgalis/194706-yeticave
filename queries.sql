@@ -9,7 +9,7 @@ VALUES
 	('Разное', 'other');
 
 -- INSERT Users
-INSERT INTO users (registration_date, email, username, password, avatar, contacts, lots, bets)
+INSERT INTO users (registration_date, email, username, password, avatar, contacts)
 VALUES
   (CURRENT_TIMESTAMP(), 'user1@gmail.com', 'Ivan Petrov', '123456', NULL, 'Moscow 123-45-67'),
   (CURRENT_TIMESTAMP(), 'user2@gmail.com', 'John Doe', 'qwerty', NULL, 'New York 3456789876');
