@@ -3,7 +3,7 @@
     require_once('functions.php');
 
     session_start();
-    // $user = isset($_SESSION['user']) ? $_SESSION['user'] : [];
+    $_SESSION['main_page'] = false;
 
     $con = mysqli_connect('127.0.0.1', 'root', 'qwerty123', 'yeticave_194706');
 

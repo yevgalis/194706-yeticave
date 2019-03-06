@@ -2,22 +2,17 @@
     require_once('init.php');
 
     if (empty($_SESSION['user'])) {
-        header('HTTP/1.1 403 Forbidden');
+        if (empty($_SESSION['user'])) {
+            error_redirect(
+                '403',
+                'Доступ запрещен',
+                'Для добавления лота <a href="login.php">Войдите на сайт</a> или <a href="sign-up.php">Зарегистрируйтесь</a>',
+                'Доступ запрещен',
+                $categories
+            );
 
-        $page_content = include_template('error_redirect.php', [
-            'categories' => $categories,
-            'error_title' => 'Доступ запрещен',
-            'error_text' => 'Для добавления лота <a href="login.php">Войдите на сайт</a> или <a href="sign-up.php">Зарегистрируйтесь</a>',
-            ]);
-
-        $layout_content = include_template('layout.php', [
-            'title' => 'Страница не найдена',
-            'content' => $page_content,
-            'categories' => $categories
-            ]);
-
-        print($layout_content);
-        exit();
+            exit();
+        }
     }
 
     $title_max_length = 100;

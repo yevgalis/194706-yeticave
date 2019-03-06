@@ -1,6 +1,11 @@
 <?php
     require_once('init.php');
 
+    if (!empty($_SESSION['user'])) {
+        header("Location: /");
+        exit();
+    }
+
     $pswd_min_length = 8;
     $name_max_length = 30;
     $contact_max_length = 60;

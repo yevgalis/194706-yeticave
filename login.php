@@ -1,6 +1,11 @@
 <?php
     require_once('init.php');
 
+    if (!empty($_SESSION['user'])) {
+        header("Location: /");
+        exit();
+    }
+
     $data = [];
     $invalid_values = [];
     $user_data = [];
