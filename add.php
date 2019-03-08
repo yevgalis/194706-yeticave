@@ -1,18 +1,16 @@
 <?php
     require_once('init.php');
 
-    if (empty($_SESSION['user'])) {
-        if (empty($_SESSION['user'])) {
-            error_redirect(
-                '403',
-                'Доступ запрещен',
-                'Для добавления лота <a href="login.php">Войдите на сайт</a> или <a href="sign-up.php">Зарегистрируйтесь</a>',
-                'Доступ запрещен',
-                $categories
-            );
+    if (empty($user)) {
+        error_redirect(
+            '403',
+            'Доступ запрещен',
+            'Для добавления лота <a href="login.php">Войдите на сайт</a> или <a href="sign-up.php">Зарегистрируйтесь</a>',
+            'Доступ запрещен',
+            $categories
+        );
 
-            exit();
-        }
+        exit();
     }
 
     $title_max_length = 100;
@@ -106,7 +104,7 @@
 
             move_uploaded_file($_FILES['item-photo']['tmp_name'], $file_path . $file_name);
 
-            $sql = "INSERT INTO lots (creation_date, name, description, image, start_price, end_date, step, author_id, winner_id, category_id) VALUES (CURRENT_TIMESTAMP(), ?, ?, ?, ?, ?, ?, 1, NULL, ?)";
+            $sql = "INSERT INTO lots (name, description, image, start_price, end_date, step, author_id, winner_id, category_id) VALUES (?, ?, ?, ?, ?, ?, 1, NULL, ?)";
 
             $new_lot_id = db_insert_data($con, $sql, [
                 $data['lot-name'],
@@ -119,7 +117,8 @@
             ]);
 
             if ($new_lot_id) {
-                header('Location: lot.php?id=' . $new_lot_id);
+                header("Location: lot.php?id=" . $new_lot_id);
+                exit();
             }
         }
     }
@@ -132,8 +131,11 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Добавление лота',
+        'is_index' => $is_index_page,
+        'user' => $user,
         'content' => $page_content,
-        'categories' => $categories]);
+        'categories' => $categories
+        ]);
 
     print($layout_content);
 ?>

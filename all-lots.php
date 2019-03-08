@@ -36,6 +36,8 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Все лоты',
+        'is_index' => $is_index_page,
+        'user' => $user,
         'content' => $page_content,
         'categories' => $categories
         ]);

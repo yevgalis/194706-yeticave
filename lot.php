@@ -31,10 +31,10 @@
         exit();
     }
 
-    //  BET FORM
+    //  BET FORM PROCESSING
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //  AUTHORIZATION CHECK
-        if (empty($_SESSION['user'])) {
+        if (empty($user)) {
             error_redirect(
                 '403',
                 'Доступ запрещен',
@@ -76,13 +76,16 @@
 
         //  NO ERRORS
         if (empty($invalid_values)) {
-            $sql = "INSERT INTO bets (bet_date, amount, user_id, lot_id) VALUES (CURRENT_TIMESTAMP(), ?, ?, ?)";
+            $sql = "INSERT INTO bets (amount, user_id, lot_id) VALUES (?, ?, ?)";
 
             $new_lot_id = db_insert_data($con, $sql, [
                 $form_data['cost'],
-                $_SESSION['user']['user_id'],
-                $lot_id
+                $user['user_id'],
+                $lot_data['lot_id']
             ]);
+
+            $lot_data['price'] = $form_data['cost'];
+            $form_data['cost'] = '';
         }
     }
 
@@ -96,13 +99,17 @@
         'lot' => $lot_data,
         'bets' => $bets,
         'invalid_values' => $invalid_values,
-        'data' => $form_data
+        'data' => $form_data,
+        'user' => $user
         ]);
 
     $layout_content = include_template('layout.php', [
         'title' => $lot_data['title'],
+        'is_index' => $is_index_page,
+        'user' => $user,
         'content' => $lot_content,
-        'categories' => $categories]);
+        'categories' => $categories
+        ]);
 
     print($layout_content);
 ?>

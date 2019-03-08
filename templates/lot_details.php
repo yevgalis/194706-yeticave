@@ -1,8 +1,8 @@
 <nav class="nav">
     <ul class="nav__list container">
-        <?php foreach ($categories as $key => $value): ?>
+        <?php foreach ($categories as $category): ?>
             <li class="nav__item">
-                <a href="all-lots.php?category_id=<?=$value['category_id']; ?>"><?=$value['name']; ?></a>
+                <a href="all-lots.php?category_id=<?=$category['category_id']; ?>"><?=$category['name']; ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -18,7 +18,7 @@
         <p class="lot-item__description"><?=htmlspecialchars($lot['description']); ?></p>
     </div>
     <div class="lot-item__right">
-        <?php if (!empty($_SESSION['user']) && (strtotime($lot['end_date']) - time()) > 0): ?>
+        <?php if (!empty($user) && (strtotime($lot['end_date']) - time()) > 0): ?>
             <div class="lot-item__state">
                 <div class="lot-item__timer timer">
                     <?=show_remaining_time($lot['end_date']); ?>
@@ -33,7 +33,7 @@
                 </div>
                 </div>
                 <form class="lot-item__form<?=$invalid_values ? ' form--invalid' : ''; ?>" action="lot.php?id=<?=$lot['lot_id']; ?>" method="post">
-                    <p class="lot-item__form-item form__item form__item--invalid">
+                    <p class="lot-item__form-item form__item<?=$invalid_values ? ' form__item--invalid' : ''; ?>">
                         <label for="cost">Ваша ставка</label>
                         <input id="cost" type="text" name="cost" placeholder="<?=$lot['price'] + $lot['step']; ?>" <?=!empty($data['cost']) ? ' value="' . $data['cost'] . '"' : ''; ?>>
                         <span class="form__error"><?=$invalid_values['cost'] ?></span>

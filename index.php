@@ -2,7 +2,7 @@
     require_once('init.php');
 
     $lots = [];
-    $_SESSION['main_page'] = true;
+    $is_index_page = true;
 
     $sql = 'SELECT 	l.lot_id, l.name AS title, l.start_price, l.end_date, l.image,
                     CASE
@@ -28,6 +28,8 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Главная',
+        'is_index' => $is_index_page,
+        'user' => $user,
         'content' => $page_content,
         'categories' => $categories
         ]);

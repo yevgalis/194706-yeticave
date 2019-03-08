@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?= $title; ?></title>
+    <title><?=$title; ?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -12,7 +12,7 @@
 <header class="main-header">
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
-        <a <?=$_SESSION['main_page'] === true ? '' : 'href="index.php" '; ?> class="main-header__logo">
+        <a <?=$is_index ? '' : 'href="index.php" '; ?> class="main-header__logo">
             <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
         <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru">
@@ -23,12 +23,12 @@
 
         <nav class="user-menu">
 
-        <?php if (!empty($_SESSION['user'])): ?>
+        <?php if (!empty($user)): ?>
             <div class="user-menu__image">
-                <img src="img/avatars/<?=$_SESSION['user']['avatar'] ? $_SESSION['user']['avatar'] : 'user.png'; ?>" width="40" height="40" alt="Пользователь">
+                <img src="img/avatars/<?=$user['avatar'] ? $user['avatar'] : 'user.png'; ?>" width="40" height="40" alt="Пользователь">
             </div>
             <div class="user-menu__logged">
-                <p><?=htmlspecialchars($_SESSION['user']['username']); ?></p>
+                <p><?=htmlspecialchars($user['username']); ?></p>
                 <a href="logout.php">Выйти</a>
             </div>
         <?php else: ?>
@@ -54,9 +54,9 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach ($categories as $key => $value): ?>
+            <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="all-lots.php?category_id=<?=$value['category_id']; ?>"><?=$value['name']; ?></a>
+                    <a href="all-lots.php?category_id=<?=$category['category_id']; ?>"><?=$category['name']; ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

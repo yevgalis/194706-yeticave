@@ -2,9 +2,9 @@
     <h2 class="promo__title">Нужен стафф для катки?</h2>
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
     <ul class="promo__list">
-        <?php foreach ($categories as $key => $value): ?>
-            <li class="promo__item promo__item--<?=$value['class']; ?>">
-                <a class="promo__link" href="all-lots.php?category_id=<?=$value['category_id']; ?>"><?=$value['name']; ?></a>
+        <?php foreach ($categories as $category): ?>
+            <li class="promo__item promo__item--<?=$category['class']; ?>">
+                <a class="promo__link" href="all-lots.php?category_id=<?=$category['category_id']; ?>"><?=$category['name']; ?></a>
             </li>
         <?php endforeach; ?>
     </ul>

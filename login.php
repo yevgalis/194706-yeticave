@@ -1,7 +1,7 @@
 <?php
     require_once('init.php');
 
-    if (!empty($_SESSION['user'])) {
+    if (!empty($user)) {
         header("Location: /");
         exit();
     }
@@ -38,8 +38,9 @@
         // PASSWORD CHECK
         if (empty($invalid_values['password'])) {
             if (!empty($user_data) && password_verify($data['password'], $user_data['password'])) {
-                $_SESSION['user'] = $user_data;
-                header('Location: index.php');
+                $_SESSION['user']['user_id'] = $user_data['user_id'];
+                header("Location: /index.php");
+                exit();
             } elseif (!empty($user_data) && !password_verify($data['password'], $user_data['password'])) {
                 $invalid_values['password'] = 'Вы ввели неверный пароль';
             }
@@ -54,6 +55,8 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Вход',
+        'is_index' => $is_index_page,
+        'user' => $user,
         'content' => $page_content,
         'categories' => $categories
         ]);
