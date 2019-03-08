@@ -1,6 +1,11 @@
 <?php
     require_once('init.php');
 
+    if (!empty($user)) {
+        header("Location: /");
+        exit();
+    }
+
     $pswd_min_length = 8;
     $name_max_length = 30;
     $contact_max_length = 60;
@@ -66,7 +71,8 @@
                 $data['avatar'] = $file_name;
             }
         } else {
-            $data['avatar'] = '';
+            // $data['avatar'] = '';
+            $data['avatar'] = null;
         }
 
         // IF THERE ARE NO ERRORS
@@ -77,18 +83,29 @@
 
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO users (registration_date, email, username, password, avatar, contacts) VALUES (CURRENT_TIMESTAMP(), ?, ?, ?, ?, ?)";
+            $sql_array = empty($data['avatar'])
+                ? [
+                    $data['email'],
+                    $data['name'],
+                    $data['password'],
+                    $data['message']
+                    ]
+                : [
+                    $data['email'],
+                    $data['name'],
+                    $data['password'],
+                    $data['message'],
+                    $data['avatar']
+                    ];
+            $into = empty($data['avatar']) ? '' : ', avatar';
+            $value = empty($data['avatar']) ? '' : ', ?';
 
-            $new_user_id = db_insert_data($con, $sql, [
-                $data['email'],
-                $data['name'],
-                $data['password'],
-                $data['avatar'],
-                $data['message']
-            ]);
+            $sql = "INSERT INTO users (email, username, password, contacts $into) VALUES (?, ?, ?, ? $value)";
+            $new_user_id = db_insert_data($con, $sql, $sql_array);
 
             if ($new_user_id) {
-                header('Location: login.php');
+                header("Location: login.php");
+                exit();
             }
         }
     }
@@ -101,6 +118,8 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Регистрация',
+        'is_index' => $is_index_page,
+        'user' => $user,
         'content' => $page_content,
         'categories' => $categories
         ]);

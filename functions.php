@@ -44,6 +44,32 @@
         return $format;
     }
 
+    function error_redirect($err_code, $err_title, $err_desc, $page_title, $categories) {
+        $header = '';
+        $err_codes_desc = [
+            '403' => 'HTTP/1.1 403 Forbidden',
+            '404' => 'HTTP/1.1 404 Page Not Found'
+        ];
+
+        ($err_code !== '403' && $err_code !== '404') ? $header = 'HTTP/1.1 404 Page Not Found' : $err_codes_desc[$err_code];
+
+        header($header);
+
+        $page_content = include_template('error_redirect.php', [
+            'categories' => $categories,
+            'error_title' => $err_title,
+            'error_text' => $err_desc,
+            ]);
+
+        $layout_content = include_template('layout.php', [
+            'title' => $page_title,
+            'content' => $page_content,
+            'categories' => $categories
+            ]);
+
+        print($layout_content);
+    }
+
     function db_fetch_data($link, $sql, $data = [], $is_single_res = false) {
         $result = [];
         $stmt = db_get_prepare_stmt($link, $sql, $data);

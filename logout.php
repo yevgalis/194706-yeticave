@@ -2,5 +2,6 @@
     require_once('init.php');
 
     unset($_SESSION['user']);
-    header('Location: /index.php');
+    unset($user);
+    header("Location: /index.php");
 ?>

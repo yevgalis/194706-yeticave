@@ -2,7 +2,19 @@
     require_once('init.php');
 
     $lots = [];
-    $is_index_page = true;
+    $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+
+    if (empty($category_id)) {
+        error_redirect(
+            '404',
+            '404 Страница не найдена',
+            'Данной страницы не существует',
+            'Страница не найдена',
+            $categories
+        );
+
+        exit();
+    }
 
     $sql = 'SELECT 	l.lot_id, l.name AS title, l.start_price, l.end_date, l.image,
                     CASE
@@ -11,23 +23,19 @@
                     END price, c.name AS category
                 FROM lots l
                 INNER JOIN categories c USING(category_id)
-                WHERE l.end_date > NOW()
+                WHERE l.end_date > NOW() AND l.category_id = ?
                 ORDER BY l.creation_date DESC
                 LIMIT 6';
 
-    $result = mysqli_query($con, $sql);
+    $lots = db_fetch_data($con, $sql, [$category_id]);
 
-    if ($result) {
-        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-
-    $page_content = include_template('index.php', [
+    $page_content = include_template('all-lots.php', [
         'categories' => $categories,
         'lots' => $lots
         ]);
 
     $layout_content = include_template('layout.php', [
-        'title' => 'Главная',
+        'title' => 'Все лоты',
         'is_index' => $is_index_page,
         'user' => $user,
         'content' => $page_content,
