@@ -59,6 +59,18 @@
             exit();
         }
 
+        //  LOT AUTHOR CHECK
+        if ($user['user_id'] == $lot_data['author_id']) {
+            header("Location: /index.php");
+            exit();
+        }
+
+        //  LAST BET USER CHECK
+        if ($user['user_id'] == $lot_data['last_bet_user_id']) {
+            header("Location: /index.php");
+            exit();
+        }
+
         //  FORM VALIDATION
         $keys = ['cost'];
 
