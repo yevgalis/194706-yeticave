@@ -28,17 +28,70 @@
         return $show_money_sign === true ? $price . '<b class="rub">р</b>' : $price;
     }
 
-    function show_remaining_time ($end_date) {
-        $now = date_create('now');
-        $close_date = date_create($end_date);
-        $diff = date_diff($now, $close_date);
+    function show_remaining_time ($end_date, $is_lot_details = false) {
+        $format = '';
+        $now = time();
+        $close_date = strtotime($end_date);
+        $date_diff = $close_date - $now;
 
-        if ($diff->d >= 1 && $diff->d <= 3) {
-            $format = $diff->d . ' дн.';
-        } else if ($diff->d > 3) {
-            $format = date('d.m.Y', strtotime($end_date));
+        if ($is_lot_details) {
+            $hours = $date_diff / 3600;
+            $hours_formated = strlen(floor($hours)) < 2 ? '0' . floor($hours) : floor($hours);
+            $minutes = ($hours - $hours_formated) * 60;
+            $minutes_formated = strlen(floor($minutes)) < 2 ? '0' . floor($minutes) : floor($minutes);
+
+            $format = $hours_formated . ':' . $minutes_formated;
         } else {
-            $format = $diff->h . ':' . $diff->i;
+            $days = $date_diff / 86400;
+            $days_formated = floor($days);
+            $hours = ($days - $days_formated) * 24;
+            $hours_formated = strlen(floor($hours)) < 2 ? '0' . floor($hours) : floor($hours);
+            $minutes = ($hours - $hours_formated) * 60;
+            $minutes_formated = strlen(floor($minutes)) < 2 ? '0' . floor($minutes) : floor($minutes);
+
+            if ($days >= 1 && $days <= 3) {
+                $format = $days_formated . ' дн. ' . $hours_formated . ':' . $minutes_formated;
+            } else if ($days > 3) {
+                $format = date('d.m.Y', strtotime($end_date));
+            } else {
+                $format = $hours_formated . ':' . $minutes_formated;
+            }
+        }
+
+        return $format;
+    }
+
+    function show_bet_time ($bet_date) {
+        $format = '';
+        $now = time();
+        $bet_time = strtotime($bet_date);
+        $date_diff = $now - $bet_time;
+
+        $days = $date_diff / 86400;
+        $days_formated = floor($days);
+        $hours = ($days - $days_formated) * 24;
+        $hours_formated = floor($hours);
+        $minutes = ($hours - $hours_formated) * 60;
+        $minutes_formated = floor($minutes);
+
+        if ($bet_time < strtotime('yesterday')) {
+            $format = date('d.m.Y H:i', $bet_time);
+        }
+
+        if ($bet_time >= strtotime('yesterday') && $bet_time < strtotime('today')) {
+            $format = 'Вчера в ' . date('H:i', $bet_time);
+        }
+
+        if ($bet_time >= strtotime('today')) {
+            if ($minutes_formated < 1 && $hours_formated < 1) {
+                $format = 'Только что';
+            } else if ($minutes_formated >= 1 && $hours_formated < 1) {
+                $format = $minutes_formated . ' мин. назад';
+            } else if ($hours_formated >= 1 && $hours_formated <= 3) {
+                $format = $hours_formated . ' ч. назад';
+            } else {
+                $format = 'Сегодня в ' . date('H:i', $bet_time);
+            }
         }
 
         return $format;

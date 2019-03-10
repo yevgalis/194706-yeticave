@@ -20,11 +20,7 @@
 
     //  GET CATEGORIES
     $sql = 'select * from categories';
-    $result = mysqli_query($con, $sql);
-
-    if ($result) {
-        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
+    $categories = db_fetch_data($con, $sql, []);
 
     //  GET USER DATA IF LOGGED IN
     if (!empty($user)) {

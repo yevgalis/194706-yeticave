@@ -2,14 +2,14 @@
     <ul class="nav__list container">
         <?php foreach ($categories as $category): ?>
             <li class="nav__item">
-                <a href="all-lots.php?category_id=<?=$category['category_id']; ?>"><?=$category['name']; ?></a>
+                <a href="lots-by-category.php?category_id=<?=$category['category_id']; ?>"><?=$category['name']; ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
 </nav>
 <div class="container">
     <section class="lots">
-        <h2>Все лоты в категории <span><?=$value['name']; ?></span></h2>
+        <h2>Все лоты в категории <span><?=$lots_category['name']; ?></span></h2>
         <ul class="lots__list">
             <?php foreach ($lots as $lot): ?>
                 <li class="lots__item lot">
@@ -33,13 +33,5 @@
             <?php endforeach; ?>
         </ul>
     </section>
-
-    <ul class="pagination-list">
-        <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-        <li class="pagination-item pagination-item-active"><a>1</a></li>
-        <li class="pagination-item"><a href="#">2</a></li>
-        <li class="pagination-item"><a href="#">3</a></li>
-        <li class="pagination-item"><a href="#">4</a></li>
-        <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
-    </ul>
+    <?=$pagination_content; ?>
 </div>

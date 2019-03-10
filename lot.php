@@ -12,7 +12,8 @@
             CASE
                 WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
                 ELSE (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id)
-            END price, l.step, c.name AS category_name
+            END price, l.step, c.name AS category_name, l.author_id,
+            COALESCE((SELECT t.user_id FROM bets t WHERE t.lot_id = l.lot_id ORDER BY t.bet_id DESC LIMIT 1), 0) AS last_bet_user_id
             FROM lots l
             INNER JOIN categories c USING(category_id)
             WHERE l.lot_id = ?';
@@ -84,7 +85,9 @@
                 $lot_data['lot_id']
             ]);
 
+            //  UPDATE CURRENT LOT DATA && CLEAR INPUT
             $lot_data['price'] = $form_data['cost'];
+            $lot_data['last_bet_user_id'] = $user['user_id'];
             $form_data['cost'] = '';
         }
     }
