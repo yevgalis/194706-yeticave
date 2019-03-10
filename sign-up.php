@@ -71,8 +71,7 @@
                 $data['avatar'] = $file_name;
             }
         } else {
-            // $data['avatar'] = '';
-            $data['avatar'] = null;
+            $data['avatar'] = NULL;
         }
 
         // IF THERE ARE NO ERRORS

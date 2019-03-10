@@ -2,7 +2,7 @@
     <ul class="nav__list container">
         <?php foreach ($categories as $category): ?>
             <li class="nav__item">
-                <a href="all-lots.php?category_id=<?=$category['category_id']; ?>"><?=$category['name']; ?></a>
+                <a href="lots-by-category.php?category_id=<?=$category['category_id']; ?>"><?=$category['name']; ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -18,10 +18,10 @@
         <p class="lot-item__description"><?=htmlspecialchars($lot['description']); ?></p>
     </div>
     <div class="lot-item__right">
-        <?php if (!empty($user) && (strtotime($lot['end_date']) - time()) > 0): ?>
+        <?php if (!empty($user) && (strtotime($lot['end_date']) - time()) > 0 && ($user['user_id'] !== $lot['author_id']) && ($user['user_id'] !== $lot['last_bet_user_id'])): ?>
             <div class="lot-item__state">
                 <div class="lot-item__timer timer">
-                    <?=show_remaining_time($lot['end_date']); ?>
+                    <?=show_remaining_time($lot['end_date'], true); ?>
                 </div>
                 <div class="lot-item__cost-state">
                 <div class="lot-item__rate">
@@ -49,7 +49,7 @@
                 <tr class="history__item">
                     <td class="history__name"><?=$bet['username']; ?></td>
                     <td class="history__price"><?=render_price($bet['amount'], true); ?></td>
-                    <td class="history__time"><?=show_remaining_time($bet['bet_date']); ?></td>
+                    <td class="history__time"><?=show_bet_time($bet['bet_date']); ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

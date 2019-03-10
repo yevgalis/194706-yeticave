@@ -104,7 +104,7 @@
 
             move_uploaded_file($_FILES['item-photo']['tmp_name'], $file_path . $file_name);
 
-            $sql = "INSERT INTO lots (name, description, image, start_price, end_date, step, author_id, winner_id, category_id) VALUES (?, ?, ?, ?, ?, ?, 1, NULL, ?)";
+            $sql = "INSERT INTO lots (name, description, image, start_price, end_date, step, author_id, winner_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, NULL, ?)";
 
             $new_lot_id = db_insert_data($con, $sql, [
                 $data['lot-name'],
@@ -113,6 +113,7 @@
                 $data['lot-rate'],
                 $data['lot-date'],
                 $data['lot-step'],
+                $user['user_id'],
                 $data['category_id']
             ]);
 
