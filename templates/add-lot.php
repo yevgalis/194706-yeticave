@@ -20,7 +20,7 @@
         <select id="category" name="category" required>
             <option>Выберите категорию</option>
             <?php foreach ($categories as $key => $value): ?>
-                <option><?=$value['name']; ?></option>
+                <option <?=(!empty($data['category_id']) && $data['category_id'] === $value['category_id']) ? ' selected' : ''; ?> ><?=$value['name']; ?></option>
             <?php endforeach; ?>
         </select>
         <span class="form__error"><?=$invalid_values['category'] ?></span>

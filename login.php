@@ -10,7 +10,7 @@
     $invalid_values = [];
     $user_data = [];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $keys = ['email', 'password'];
 
         foreach ($keys as $key) {
@@ -38,7 +38,7 @@
         // PASSWORD CHECK
         if (empty($invalid_values['password'])) {
             if (!empty($user_data) && password_verify($data['password'], $user_data['password'])) {
-                $_SESSION['user']['user_id'] = $user_data['user_id'];
+                $_SESSION['user_id'] = $user_data['user_id'];
                 header("Location: /index.php");
                 exit();
             } elseif (!empty($user_data) && !password_verify($data['password'], $user_data['password'])) {
@@ -55,7 +55,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Вход',
-        'is_index' => $is_index_page,
         'user' => $user,
         'content' => $page_content,
         'categories' => $categories

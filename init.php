@@ -4,10 +4,7 @@
 
     session_start();
 
-    $user = empty($_SESSION['user']) ? [] : $_SESSION['user'];
-    $is_index_page = false;
-    $categories = [];
-    $sql = '';
+    $user['user_id'] = empty($_SESSION['user_id']) ? 0 : $_SESSION['user_id'];
 
     //  SET DB CONNECTION
     $con = mysqli_connect('127.0.0.1', 'root', 'qwerty123', 'yeticave_194706');

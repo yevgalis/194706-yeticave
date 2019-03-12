@@ -99,12 +99,22 @@
 
     function error_redirect($err_code, $err_title, $err_desc, $page_title, $categories) {
         $header = '';
-        $err_codes_desc = [
-            '403' => 'HTTP/1.1 403 Forbidden',
-            '404' => 'HTTP/1.1 404 Page Not Found'
-        ];
 
-        ($err_code !== '403' && $err_code !== '404') ? $header = 'HTTP/1.1 404 Page Not Found' : $err_codes_desc[$err_code];
+        switch ($err_code) {
+            case 401: $header = 'HTTP/1.1 401 Unauthorized';
+            break;
+            case 403: $header = 'HTTP/1.1 403 Forbidden';
+            break;
+            case 404: $header = 'HTTP/1.1 404 Page Not Found';
+            break;
+            case 500: $header = 'HTTP/1.1 500 Internal Server Error';
+            break;
+            case 503: $header = 'HTTP/1.1 503 Service Unavailable';
+            break;
+            default:
+                $header = 'HTTP/1.1 404 Page Not Found';
+            break;
+        }
 
         header($header);
 
@@ -126,12 +136,19 @@
     function db_fetch_data($link, $sql, $data = [], $is_single_res = false) {
         $result = [];
         $stmt = db_get_prepare_stmt($link, $sql, $data);
+
+        if (!$stmt) {
+            exit('503 Внутренняя ошибка сервера. Попробуйте позже');
+        }
+
         mysqli_stmt_execute($stmt);
         $res = mysqli_stmt_get_result($stmt);
 
-        if ($res) {
-            $result = $is_single_res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : mysqli_fetch_all($res, MYSQLI_ASSOC);
+        if (!$res) {
+            exit('503 Внутренняя ошибка сервера. Попробуйте позже');
         }
+
+        $result = $is_single_res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : mysqli_fetch_all($res, MYSQLI_ASSOC);
 
         return $result;
     }
@@ -140,12 +157,12 @@
         $stmt = db_get_prepare_stmt($link, $sql, $data);
         $result = mysqli_stmt_execute($stmt);
 
-        if ($result) {
-            $result = mysqli_insert_id($link);
-        } else {
+        if (!$result) {
             exit('Произошла ошибка');
         }
 
-      return $result;
+        $result = mysqli_insert_id($link);
+
+        return $result;
     }
 ?>

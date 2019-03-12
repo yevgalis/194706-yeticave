@@ -2,9 +2,11 @@
     require_once('init.php');
 
     if (empty($user)) {
+        http_response_code(401);
+
         error_redirect(
-            '403',
-            'Доступ запрещен',
+            http_response_code(),
+            'Доступ только для авторизированных пользователей',
             'Для добавления лота <a href="login.php">Войдите на сайт</a> или <a href="sign-up.php">Зарегистрируйтесь</a>',
             'Доступ запрещен',
             $categories
@@ -20,7 +22,7 @@
     $invalid_values = [];
     $category_match = false;
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $keys = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
         $file_name = '';
 
@@ -88,7 +90,7 @@
 
         // LOT END DATE CHECK
         if (empty($invalid_values['lot-date'])) {
-            $min_date = date_create('tomorrow + 1 day')->format('Y-m-d');
+            $min_date = date_create('tomorrow')->format('Y-m-d');
             $end_date = date('Y-m-d', strtotime($data['lot-date']));
 
             if ($end_date < $min_date) {
@@ -132,7 +134,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Добавление лота',
-        'is_index' => $is_index_page,
         'user' => $user,
         'content' => $page_content,
         'categories' => $categories

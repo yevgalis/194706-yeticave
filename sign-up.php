@@ -13,7 +13,7 @@
     $data = [];
     $invalid_values = [];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $keys = ['email', 'password', 'name', 'message'];
         $user_data = [];
         $file_name = '';
@@ -82,25 +82,16 @@
 
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-            $sql_array = empty($data['avatar'])
-                ? [
-                    $data['email'],
-                    $data['name'],
-                    $data['password'],
-                    $data['message']
-                    ]
-                : [
-                    $data['email'],
-                    $data['name'],
-                    $data['password'],
-                    $data['message'],
-                    $data['avatar']
-                    ];
-            $into = empty($data['avatar']) ? '' : ', avatar';
-            $value = empty($data['avatar']) ? '' : ', ?';
+            $value = empty($data['avatar']) ? ', NULL' : ', ?';
+            $sql = "INSERT INTO users (email, username, password, contacts, avatar) VALUES (?, ?, ?, ? $value)";
 
-            $sql = "INSERT INTO users (email, username, password, contacts $into) VALUES (?, ?, ?, ? $value)";
-            $new_user_id = db_insert_data($con, $sql, $sql_array);
+            $new_user_id = db_insert_data($con, $sql, [
+                $data['email'],
+                $data['name'],
+                $data['password'],
+                $data['message'],
+                $data['avatar']
+                ]);
 
             if ($new_user_id) {
                 header("Location: login.php");
@@ -117,7 +108,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Регистрация',
-        'is_index' => $is_index_page,
         'user' => $user,
         'content' => $page_content,
         'categories' => $categories
