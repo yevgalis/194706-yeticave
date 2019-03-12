@@ -23,14 +23,12 @@
     $address = $_SERVER['PHP_SELF'] . '?search=' . $search . '&find=Найти&';
 
     //  SEARCH LOTS
-    $sql = 'SELECT 	l.lot_id, l.name AS title, l.end_date, l.image,
-                    CASE
-                        WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
-                        ELSE (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id)
-                    END price, c.name AS category
+    $sql = 'SELECT 	l.lot_id, l.name AS title, l.end_date, l.image, COALESCE(max(b.amount), l.start_price) AS price, c.name AS category
             FROM lots l
                 INNER JOIN categories c USING(category_id)
+                LEFT JOIN bets b USING(lot_id)
             WHERE MATCH(l.name, l.description) AGAINST(? IN BOOLEAN MODE) AND l.end_date > NOW()
+            GROUP BY l.lot_id
             LIMIT ' . $page_items . ' OFFSET ' . $offset;
 
     $lots = db_fetch_data($con, $sql, [$search]);
@@ -52,7 +50,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => 'Результаты поиска',
-        'is_index' => $is_index_page,
         'user' => $user,
         'content' => $page_content,
         'categories' => $categories,

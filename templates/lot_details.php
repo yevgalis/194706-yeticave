@@ -18,12 +18,11 @@
         <p class="lot-item__description"><?=htmlspecialchars($lot['description']); ?></p>
     </div>
     <div class="lot-item__right">
-        <?php if (!empty($user) && (strtotime($lot['end_date']) - time()) > 0 && ($user['user_id'] !== $lot['author_id']) && ($user['user_id'] !== $lot['last_bet_user_id'])): ?>
-            <div class="lot-item__state">
-                <div class="lot-item__timer timer">
-                    <?=show_remaining_time($lot['end_date'], true); ?>
-                </div>
-                <div class="lot-item__cost-state">
+        <div class="lot-item__state">
+            <div class="lot-item__timer timer">
+                <?=show_remaining_time($lot['end_date'], true); ?>
+            </div>
+            <div class="lot-item__cost-state">
                 <div class="lot-item__rate">
                     <span class="lot-item__amount">Текущая цена</span>
                     <span class="lot-item__cost"><?=render_price($lot['price']); ?></span>
@@ -31,7 +30,8 @@
                 <div class="lot-item__min-cost">
                     Мин. ставка <span><?=render_price($lot['price'] + $lot['step']); ?> p</span>
                 </div>
-                </div>
+            </div>
+            <?php if (!empty($user) && (strtotime($lot['end_date']) - time()) > 0 && ($user['user_id'] !== $lot['author_id']) && ($user['user_id'] !== $lot['last_bet_user_id'])): ?>
                 <form class="lot-item__form<?=$invalid_values ? ' form--invalid' : ''; ?>" action="lot.php?id=<?=$lot['lot_id']; ?>" method="post">
                     <p class="lot-item__form-item form__item<?=$invalid_values ? ' form__item--invalid' : ''; ?>">
                         <label for="cost">Ваша ставка</label>
@@ -40,8 +40,8 @@
                     </p>
                     <button type="submit" class="button">Сделать ставку</button>
                 </form>
+            <?php endif; ?>
             </div>
-        <?php endif; ?>
         <div class="history">
         <h3>История ставок (<span><?=count($bets); ?></span>)</h3>
         <table class="history__list">

@@ -8,23 +8,22 @@
     $lot_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
     //  GET LOT DATA
-    $sql = 'SELECT 	l.lot_id, l.name AS title, l.description, l.start_price, l.end_date, l.image,
-            CASE
-                WHEN (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id) IS NULL THEN l.start_price
-                ELSE (SELECT max(b.amount) FROM bets b WHERE b.lot_id = l.lot_id)
-            END price, l.step, c.name AS category_name, l.author_id,
-            COALESCE((SELECT t.user_id FROM bets t WHERE t.lot_id = l.lot_id ORDER BY t.bet_id DESC LIMIT 1), 0) AS last_bet_user_id
+    $sql = 'SELECT 	l.lot_id, l.name AS title, l.description, l.start_price, l.end_date, l.image, COALESCE(max(b.amount), l.start_price) AS price, l.step, c.name AS category_name, l.author_id, COALESCE((SELECT t.user_id FROM bets t WHERE t.lot_id = l.lot_id ORDER BY t.bet_id DESC LIMIT 1), 0) AS last_bet_user_id
             FROM lots l
-            INNER JOIN categories c USING(category_id)
-            WHERE l.lot_id = ?';
+                INNER JOIN categories c USING(category_id)
+                LEFT JOIN bets b USING(lot_id)
+            WHERE l.lot_id = ?
+            GROUP BY l.lot_id';
 
     $lot_data = db_fetch_data($con, $sql, [$lot_id], true);
 
     if (empty($lot_data)) {
+        http_response_code(404);
+
         error_redirect(
-            '404',
-            '404 Страница не найдена',
-            'Данной страницы не существует на сайте',
+            http_response_code(),
+            'Страница не найдена',
+            'Данной страницы не существует',
             'Страница не найдена',
             $categories
         );
@@ -33,12 +32,14 @@
     }
 
     //  BET FORM PROCESSING
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //  AUTHORIZATION CHECK
         if (empty($user)) {
+            http_response_code(401);
+
             error_redirect(
-                '403',
-                'Доступ запрещен',
+                http_response_code(),
+                'Доступ только для авторизированных пользователей',
                 'Для добавления ставки <a href="login.php">Войдите на сайт</a> или <a href="sign-up.php">Зарегистрируйтесь</a>',
                 'Доступ запрещен',
                 $categories
@@ -49,9 +50,11 @@
 
         //  LOT END DATE CHECK
         if ((strtotime($lot_data['end_date']) - time()) < 0) {
+            http_response_code(403);
+
             error_redirect(
-                '403',
-                'Время аукциона истекло',
+                http_response_code(),
+                'Доступ запрещен',
                 'Время аукциона истекло',
                 'Время аукциона истекло',
                 $categories);
@@ -60,13 +63,13 @@
         }
 
         //  LOT AUTHOR CHECK
-        if ($user['user_id'] == $lot_data['author_id']) {
+        if ($user['user_id'] === $lot_data['author_id']) {
             header("Location: /index.php");
             exit();
         }
 
         //  LAST BET USER CHECK
-        if ($user['user_id'] == $lot_data['last_bet_user_id']) {
+        if ($user['user_id'] === $lot_data['last_bet_user_id']) {
             header("Location: /index.php");
             exit();
         }
@@ -120,7 +123,6 @@
 
     $layout_content = include_template('layout.php', [
         'title' => $lot_data['title'],
-        'is_index' => $is_index_page,
         'user' => $user,
         'content' => $lot_content,
         'categories' => $categories
